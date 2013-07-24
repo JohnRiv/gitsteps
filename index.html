@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print" />
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Git Steps by JohnRiv</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Git Steps</h1>
+        <h2>Collection of useful commands when using Git, GitHub and/or Gerrit</h2>
+        <a href="https://github.com/JohnRiv/gitsteps" class="button"><small>View project on</small>GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a name="welcome-to-gitstepscom" class="anchor" href="#welcome-to-gitstepscom"><span class="octicon octicon-link"></span></a>Welcome to GitSteps.com!</h1>
+
+<p>This is simply a collection of commands to help you get around <a href="http://git-scm.com/">Git</a>, <a href="https://github.com/">GitHub</a> and/or <a href="https://code.google.com/p/gerrit/">Gerrit</a>. It's a single page, so your browser's "Find" command is your friend. <a href="https://help.github.com/articles/using-pull-requests">Pull requests</a> are welcome at the <a href="https://github.com/JohnRiv/gitsteps">GitHub repo</a>.</p>
+
+<p>Except for instances of "HEAD", anything in ALL CAPS should be substituted with the actual value.</p>
+
+<h2>
+<a name="general-git-steps" class="anchor" href="#general-git-steps"><span class="octicon octicon-link"></span></a>General Git Steps</h2>
+
+<h3>
+<a name="goal-stage-all-changes" class="anchor" href="#goal-stage-all-changes"><span class="octicon octicon-link"></span></a>Goal: Stage all changes</h3>
+
+<p>i.e. get ready to commit all outstanding changes (not including removed files)</p>
+
+<pre><code>$ git add .
+</code></pre>
+
+<h3>
+<a name="goal-save-outstanding-changes-but-dont-commit-them" class="anchor" href="#goal-save-outstanding-changes-but-dont-commit-them"><span class="octicon octicon-link"></span></a>Goal: Save outstanding changes but don't commit them</h3>
+
+<p>This is useful if you want to merge in code from the remote repo or work in a different branch than you are currently in</p>
+
+<pre><code>$ git stash
+</code></pre>
+
+<p>and then when you're ready to bring those changes back in:</p>
+
+<pre><code>$ git stash pop
+</code></pre>
+
+<h3>
+<a name="goal-i-want-to-just-type-git-push-instead-of-git-push-origin-master" class="anchor" href="#goal-i-want-to-just-type-git-push-instead-of-git-push-origin-master"><span class="octicon octicon-link"></span></a>Goal: I want to just type 'git push' instead of 'git push origin master'</h3>
+
+<p>Run this command once from the root of your project:</p>
+
+<pre><code>$ git push -u origin master
+</code></pre>
+
+<h3>
+<a name="goal-stop-this-error-when-trying-to-pull-from-a-remote-origin" class="anchor" href="#goal-stop-this-error-when-trying-to-pull-from-a-remote-origin"><span class="octicon octicon-link"></span></a>Goal: Stop this error when trying to pull from a remote origin:</h3>
+
+<blockquote>
+<p>You asked me to pull without telling me which branch you
+want to merge with, and 'branch.master.merge' in
+your configuration file does not tell me either.</p>
+</blockquote>
+
+<p>Add this to your .git/config file for your project:</p>
+
+<pre><code>[branch "master"]
+  remote = origin 
+  merge = refs/heads/master
+</code></pre>
+
+<h3>
+<a name="goal-search-git-logs" class="anchor" href="#goal-search-git-logs"><span class="octicon octicon-link"></span></a>Goal: Search git logs</h3>
+
+<pre><code>$ git log --grep="search term"
+</code></pre>
+
+<h3>
+<a name="goal-blow-away-all-local-changes" class="anchor" href="#goal-blow-away-all-local-changes"><span class="octicon octicon-link"></span></a>Goal: Blow away all local changes</h3>
+
+<pre><code>$ git reset --hard HEAD
+</code></pre>
+
+<h3>
+<a name="goal-update-to-latest-code-from-the-remote-origin" class="anchor" href="#goal-update-to-latest-code-from-the-remote-origin"><span class="octicon octicon-link"></span></a>Goal: Update to latest code from the remote origin</h3>
+
+<pre><code>$ git pull
+</code></pre>
+
+<h3>
+<a name="goal-have-git-pull-do-a-rebase-instead-of-a-merge-by-default" class="anchor" href="#goal-have-git-pull-do-a-rebase-instead-of-a-merge-by-default"><span class="octicon octicon-link"></span></a>Goal: Have 'git pull' do a rebase instead of a merge by default</h3>
+
+<p>Add this to your .git/config file for your project:</p>
+
+<pre><code>[pull]
+  rebase = true
+</code></pre>
+
+<h3>
+<a name="goal-get-rid-of-the-your-branch-and-originmaster-have-diverged-status-message" class="anchor" href="#goal-get-rid-of-the-your-branch-and-originmaster-have-diverged-status-message"><span class="octicon octicon-link"></span></a>Goal: Get rid of the "Your branch and 'origin/master' have diverged..." status message</h3>
+
+<p>If you're really confident your code actually matches what is at the remote origin/master</p>
+
+<pre><code>$ git reset --hard origin/master
+</code></pre>
+
+<h3>
+<a name="goal-fix-a-merge-conflict-by-accepting-changes" class="anchor" href="#goal-fix-a-merge-conflict-by-accepting-changes"><span class="octicon octicon-link"></span></a>Goal: Fix a merge conflict by accepting changes</h3>
+
+<p>Accept changes on the remote server:</p>
+
+<pre><code>$ git checkout --theirs PATH_TO_FILE
+</code></pre>
+
+<p>Accept your changes:</p>
+
+<pre><code>$ git checkout --ours PATH_TO_FILE
+</code></pre>
+
+<h3>
+<a name="goal-merge-in-a-specific-commit-from-one-branch-to-another" class="anchor" href="#goal-merge-in-a-specific-commit-from-one-branch-to-another"><span class="octicon octicon-link"></span></a>Goal: Merge in a specific commit from one branch to another</h3>
+
+<p>If you're really confident your code actually matches what is at the remote origin/master</p>
+
+<pre><code>$ git checkout BRANCH_NAME
+$ git cherry-pick SHA_HASH
+$ git push origin HEAD:refs/for/BRANCH_NAME
+</code></pre>
+
+<h3>
+<a name="goal-remove-a-bunch-of-files-from-git" class="anchor" href="#goal-remove-a-bunch-of-files-from-git"><span class="octicon octicon-link"></span></a>Goal: Remove a bunch of files from Git</h3>
+
+<p>First run this to make sure you'll be deleting the files you think you're deleting</p>
+
+<pre><code>$ git status | grep deleted | awk '{print $3}'
+</code></pre>
+
+<p>This run this to actually execute git rm on each of them</p>
+
+<pre><code>$ git rm `git status | grep deleted | awk '{print $3}'`
+</code></pre>
+
+<p>And then commit &amp; push those changes</p>
+
+<h3>
+<a name="goal-stats-on-number-of-commits-by-committer" class="anchor" href="#goal-stats-on-number-of-commits-by-committer"><span class="octicon octicon-link"></span></a>Goal: Stats on number of commits by committer</h3>
+
+<pre><code>$ git shortlog -sne --after=2013-07-01 --until=today
+</code></pre>
+
+<h3>
+<a name="goal-remove-edits-not-staged-for-commit-permanently" class="anchor" href="#goal-remove-edits-not-staged-for-commit-permanently"><span class="octicon octicon-link"></span></a>Goal: Remove Edits Not Staged for Commit (permanently)</h3>
+
+<p>First run this to make sure you'll be removing the changes you think you're removing</p>
+
+<pre><code>$ git status | grep modified | awk '{print $3}'
+</code></pre>
+
+<p>This run this to actually blow away the changes in those files</p>
+
+<pre><code>$ git checkout -- `git status | grep modified | awk '{print$3}'`
+</code></pre>
+
+<h3>
+<a name="goal-edit-the-last-commit" class="anchor" href="#goal-edit-the-last-commit"><span class="octicon octicon-link"></span></a>Goal: Edit the last commit</h3>
+
+<pre><code>$ git commit --amend
+</code></pre>
+
+<h3>
+<a name="goal-undo-the-last-commit" class="anchor" href="#goal-undo-the-last-commit"><span class="octicon octicon-link"></span></a>Goal: Undo the last commit</h3>
+
+<pre><code>$ git reset --soft HEAD^
+</code></pre>
+
+<h3>
+<a name="goal-get-rid-of-the-last-commit-for-good" class="anchor" href="#goal-get-rid-of-the-last-commit-for-good"><span class="octicon octicon-link"></span></a>Goal: Get rid of the last commit for good</h3>
+
+<pre><code>$ git reset --hard HEAD~1
+</code></pre>
+
+<h3>
+<a name="goal-show-remote-repo-url" class="anchor" href="#goal-show-remote-repo-url"><span class="octicon octicon-link"></span></a>Goal: Show remote repo URL:</h3>
+
+<pre><code>$ git remote show origin
+</code></pre>
+
+<h3>
+<a name="goal-stats-on-number-of-commits-by-committer-1" class="anchor" href="#goal-stats-on-number-of-commits-by-committer-1"><span class="octicon octicon-link"></span></a>Goal: Stats on number of commits by committer</h3>
+
+<pre><code>$ git shortlog -sne --after=2013-07-01 --until=today
+</code></pre>
+
+<h3>
+<a name="goal-display-git-details-in-terminal" class="anchor" href="#goal-display-git-details-in-terminal"><span class="octicon octicon-link"></span></a>Goal: Display git details in terminal</h3>
+
+<p>Check out <a href="https://github.com/trevmex/dotfiles/blob/master/.bashrc">Trevor Menagh's .bashrc</a> to see how to have your terminal add details of the current branch, if there are any changes (marked by an "*"), and if you're in the middle of a rebase</p>
+
+<h2>
+<a name="github-steps" class="anchor" href="#github-steps"><span class="octicon octicon-link"></span></a>GitHub Steps</h2>
+
+<h3>
+<a name="goal-move-an-existing-git-repo-to-github" class="anchor" href="#goal-move-an-existing-git-repo-to-github"><span class="octicon octicon-link"></span></a>Goal: Move an existing git repo to GitHub:</h3>
+
+<p>First create a new repo at GitHub, then:</p>
+
+<pre><code>$ git clone SSH_CLONE_URL_FROM_GITHUB_REPO
+$ git remote rename origin upstream
+$ git remote add origin URL_TO_GITHUB_REPO
+$ git push origin master
+</code></pre>
+
+<h3>
+<a name="goal-undo-a-github-push" class="anchor" href="#goal-undo-a-github-push"><span class="octicon octicon-link"></span></a>Goal: Undo a GitHub push:</h3>
+
+<pre><code>$ git reset --hard SHA_HASH
+$ git push -f origin stable  
+</code></pre>
+
+<h3>
+<a name="goal-merge-in-code-from-originally-forked-repo" class="anchor" href="#goal-merge-in-code-from-originally-forked-repo"><span class="octicon octicon-link"></span></a>Goal: Merge in code from originally forked repo:</h3>
+
+<p>Short version:</p>
+
+<pre><code>$ git fetch upstream
+$ git merge upstream/master
+$ git push origin master
+</code></pre>
+
+<p>Much more detailed version is available at GitHub Help: <a href="https://help.github.com/articles/syncing-a-fork">Syncing a fork</a></p>
+
+<h2>
+<a name="gerrit-steps" class="anchor" href="#gerrit-steps"><span class="octicon octicon-link"></span></a>Gerrit Steps</h2>
+
+<h3>
+<a name="goal-i-want-to-just-type-git-p-instead-of-git-push-origin-headrefsformaster" class="anchor" href="#goal-i-want-to-just-type-git-p-instead-of-git-push-origin-headrefsformaster"><span class="octicon octicon-link"></span></a>Goal: I want to just type 'git p' instead of 'git push origin HEAD:refs/for/master'</h3>
+
+<p>Add this to your ~/.gitconfig</p>
+
+<pre><code>[alias]
+    p = push origin HEAD:refs/for/master
+</code></pre>
+
+<h3>
+<a name="goal-resolve-a-gerrit-conflict" class="anchor" href="#goal-resolve-a-gerrit-conflict"><span class="octicon octicon-link"></span></a>Goal: Resolve a Gerrit conflict</h3>
+
+<pre><code>$ git fetch COMMAND_FROM_GERRIT
+$ git fetch
+$ git rebase origin/master
+$ git status
+</code></pre>
+
+<p>Then go and fix the conflict(s) listed in status as unmerged</p>
+
+<pre><code>$ git add FILE_YOU_FIXED
+$ git rebase --continue
+$ git push origin HEAD:refs/for/master
+</code></pre>
+
+<p>You may want to checkout these steps as well after resolving a conflict:</p>
+
+<ul>
+<li>Restore your local git repo after reviewing a gerrit changeset</li>
+<li>Get rid of the "Your branch and 'origin/master' have diverged..." status message</li>
+</ul><h3>
+<a name="goal-restore-your-local-git-repo-after-reviewing-a-gerrit-changeset" class="anchor" href="#goal-restore-your-local-git-repo-after-reviewing-a-gerrit-changeset"><span class="octicon octicon-link"></span></a>Goal: Restore your local git repo after reviewing a gerrit changeset:</h3>
+
+<pre><code>$ git checkout master
+</code></pre>
+
+<h3>
+<a name="goal-rebase-a-commit-that-is-dependent-on-an-abandoned-change" class="anchor" href="#goal-rebase-a-commit-that-is-dependent-on-an-abandoned-change"><span class="octicon octicon-link"></span></a>Goal: Rebase a commit that is dependent on an abandoned change:</h3>
+
+<pre><code>$ git fetch origin
+$ git rebase origin/master -i
+$ git commit --amend
+$ git push origin HEAD:refs/for/master
+</code></pre>
+
+<h3>
+<a name="goal-fix-ssl-certificate-problem-error" class="anchor" href="#goal-fix-ssl-certificate-problem-error"><span class="octicon octicon-link"></span></a>Goal: Fix SSL certificate problem error</h3>
+
+<p>If you get an error along these lines:</p>
+
+<blockquote>
+<p>error: SSL certificate problem, verify that the CA cert is OK. Details:
+error:14090086:SSL routines:SSL3_GET_SERVER_CERTIFICATE:certificate verify failed while accessing GERRIT_REPO
+fatal: HTTP request failed</p>
+</blockquote>
+
+<p>Run this from the project root:</p>
+
+<pre><code>$ git config http.sslVerify "false"
+</code></pre>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/JohnRiv/gitsteps/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/JohnRiv/gitsteps/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/JohnRiv/gitsteps"></a> is maintained by <a href="https://github.com/JohnRiv">JohnRiv</a>.</p>
+
+          <p>This page was generated by <a href="pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+            <script type="text/javascript">
+            var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+            document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+          </script>
+          <script type="text/javascript">
+            try {
+              var pageTracker = _gat._getTracker("UA-35632547-1");
+            pageTracker._trackPageview();
+            } catch(err) {}
+          </script>
+
+  </body>
+</html>
