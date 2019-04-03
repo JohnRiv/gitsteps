@@ -6,7 +6,7 @@ Except for instances of "HEAD", anything in ALL CAPS should be substituted with 
 ## General Git Steps
 
 ### Goal: Stage all changes
-i.e. get ready to commit all outstanding changes (not including removed files)
+i.e. get ready to commit all outstanding changes
 ```
 $ git add .
 ```
@@ -85,16 +85,6 @@ $ git cherry-pick SHA_HASH
 $ git push origin HEAD:refs/for/BRANCH_NAME
 ```
 
-### Goal: Remove a bunch of files from Git
-First run this to make sure you'll be deleting the files you think you're deleting
-```
-$ git status | grep deleted | awk '{print $3}'
-```
-This run this to actually execute git rm on each of them
-```
-$ git rm `git status | grep deleted | awk '{print $3}'`
-```
-And then commit & push those changes
 
 ### Goal: Stats on number of commits by committer
 ```
