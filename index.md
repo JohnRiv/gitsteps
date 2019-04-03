@@ -129,6 +129,21 @@ $ git shortlog -sne --after=2013-07-01 --until=today
 ### Goal: Display git details in terminal
 Check out [Trevor Menagh's .bashrc](https://github.com/trevmex/dotfiles/blob/master/.bashrc) to see how to have your terminal add details of the current branch, if there are any changes (marked by an "*"), and if you're in the middle of a rebase
 
+### Goal: Use a different email for a specific folder of git projects
+
+in ~/.gitconfig:
+```
+[includeIf "gitdir:~/path/to/folder/"]
+    path = ~/path/to/folder/.gitconfig_include
+```
+
+in  ~/path/to/folder/.gitconfig_include:
+```
+[user]
+  email = your.other@email.com
+```
+Note: the above requires at least git v2.13
+
 ## GitHub Steps
 
 ### Goal: Move an existing git repo to GitHub:
